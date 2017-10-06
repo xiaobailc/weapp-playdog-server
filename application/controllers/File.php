@@ -21,15 +21,21 @@ class File extends CI_Controller {
                 'data' => $this->upload->data(),
             );
         }
-
-        echo json_encode($response, JSON_FORCE_OBJECT);
+        //echo json_encode($response, JSON_FORCE_OBJECT);
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 
     public function store(){
-        echo json_encode([], JSON_FORCE_OBJECT);
+        $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode([]));
     }
     
     public function update(){
-        echo json_encode([], JSON_FORCE_OBJECT);
+        $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode([]));
     }
 }

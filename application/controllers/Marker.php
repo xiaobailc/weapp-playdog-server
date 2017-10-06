@@ -24,7 +24,10 @@ class Marker extends MY_Controller {
             'data' => $markers,
         );
 
-        echo json_encode($response, JSON_FORCE_OBJECT);
+        //echo json_encode($response, JSON_FORCE_OBJECT);
+        $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($response));
     }
 
     public function store(){
@@ -66,7 +69,10 @@ class Marker extends MY_Controller {
                 'data' => $data,
             );
         }
-        echo json_encode($response, JSON_FORCE_OBJECT);
+        //echo json_encode($response, JSON_FORCE_OBJECT);
+        $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($response));
     }
     
     public function update(){
@@ -108,6 +114,9 @@ class Marker extends MY_Controller {
                 ),
             );
         }
-        echo json_encode($response, JSON_FORCE_OBJECT);
+        //echo json_encode($response, JSON_FORCE_OBJECT);
+        $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($response));
     }
 }
