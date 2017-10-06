@@ -52,3 +52,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['dog/info']['get'] = 'dog/index';
+$route['dog/add']['post'] = 'dog/store';
+$route['dog/up']['post'] = 'dog/update';
+
+$route['marker/list']['get'] = 'marker/index';
+$route['marker/add']['post'] = 'marker/store';
+$route['marker/up']['post'] = 'marker/update';
+
+$route['file/add']['post'] = 'file/add';
