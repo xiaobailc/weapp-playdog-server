@@ -5,7 +5,7 @@ use \QCloud_WeApp_SDK\Auth\LoginService as LoginService;
 
 class File extends CI_Controller {
     public function add() {
-        $config['upload_path']      = '../../uploads/';
+        $config['upload_path']      = './uploads/';
         $config['allowed_types']    = 'gif|jpg|png';
         $config['encrypt_name']     = true;
 
