@@ -21,9 +21,7 @@ class Marker extends MY_Controller {
         $response = array(
             'code' => 0,
             'message' => 'ok',
-            'data' => array(
-                'markerInfo' => $markers,
-            ),
+            'data' => $markers,
         );
 
         echo json_encode($response, JSON_FORCE_OBJECT);
@@ -58,18 +56,14 @@ class Marker extends MY_Controller {
             $response = array(
                 'code' => 0,
                 'message' => 'ok',
-                'data' => array(
-                    'markerInfo' => $data,
-                ),
+                'data' => $data,
             );
         } else{
             $error = $this->db->error();
             $response = array(
                 'code' => $error['code'],
                 'message' => $error['message'],
-                'data' => array(
-                    'markerInfo' => $data,
-                ),
+                'data' => $data,
             );
         }
         echo json_encode($response, JSON_FORCE_OBJECT);

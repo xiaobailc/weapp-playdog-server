@@ -18,9 +18,7 @@ class File extends CI_Controller {
             $response = array(
                 'code' => 0,
                 'message' => 'ok',
-                'data' => array(
-                    'fileInfo' => $this->upload->data(),
-                ),
+                'data' => $this->upload->data(),
             );
         }
 
