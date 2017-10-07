@@ -14,7 +14,6 @@ class File extends CI_Controller {
         if ( ! $this->upload->do_upload('petavatar')) {
             $response = array('error' => $this->upload->display_errors());
         } else {
-            //$data = array('upload_data' => $this->upload->data());
             $response = array(
                 'code' => 0,
                 'message' => 'ok',
