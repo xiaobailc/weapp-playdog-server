@@ -14,19 +14,20 @@ class Dog extends CI_Controller {
 
         $open_id = $result['data']['userInfo']['openId'];
         //根据openid 获取宠物信息
-        $query = $this->db->get_where('dogs', ['open_id'=> $open_id], 1);
-
-        var_dump($query->result());exit;
+        $dogInfo = $this->db->select('open_id as id, name, breed, avatar_url as avatarUrl')
+            ->where(['open_id'=> $open_id])
+            ->get('dogs')
+            ->row_array();
 
         $response = array(
             'code' => 0,
             'message' => 'ok',
-            'data' => array(
-                'userInfo' => $result['data']['userInfo'],
-            ),
+            'data' => $dogInfo,
         );
 
-        echo json_encode($response, JSON_FORCE_OBJECT);
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 
     public function store(){
