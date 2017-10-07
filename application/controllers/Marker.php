@@ -39,29 +39,59 @@ class Marker extends MY_Controller {
 
         $open_id = $result['data']['userInfo']['openId'];
 
-        //$marker = $this->db->where('open_id', $open_id)->get('markers')->row();
-
-        //var_dump($marker);exit;
+        $marker = $this->db->where('open_id', $open_id)->get('markers')->row();
 
         $latitude = $this->input->post('latitude');
         $longitude = $this->input->post('longitude');
+        
+        if($marker){
+            //获取上次打卡时间
+            $last_marked_at = substr($marker->marked_at,0,10);
+            $last = strtotime($last_marked_at);
+            $now = time();
+            $diff = $now - $last;
+            if($diff < 86400) {
+                //一天之内
+                $continuous_day = $marker->continuous_day;
+                $maximum_continuous_day = $marker->maximum_continuous_day;
+            } else if ($diff < 86400*2){
+                //连续第二天
+                $continuous_day = $marker->continuous_day +1;
+                $maximum_continuous_day = $continuous_day > $marker->maximum_continuous_day ? $continuous_day : $marker->maximum_continuous_day;
+            }else{
+                //不连续
+                $continuous_day = 1;
+                $maximum_continuous_day = $marker->maximum_continuous_day;
+            }
 
-        $data = [
-            'open_id' => $open_id,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'marked_at' => date('Y-m-d H:i:s')
-        ];
+            //更新
+            $data = [
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'marked_at' => date('Y-m-d H:i:s', $now),
+                'continuous_day' => $continuous_day,
+                'maximum_continuous_day' => $maximum_continuous_day
+            ];
+            $res = $this->db->where('open_id', $open_id)->update('markers', $data);
+        }else{
+            //插入
+            $data = [
+                'open_id' => $open_id,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'marked_at' => date('Y-m-d H:i:s')
+            ];
+            $res = $this->db->insert('markers', $data);
+        }
 
-        $res = $this->db->insert('markers', $data);
-        if($res){
+        if ($res) {
             unset($data['open_id']);
             $response = array(
                 'code' => 0,
                 'message' => 'ok',
                 'data' => $data,
             );
-        } else{
+        } else {
             $error = $this->db->error();
             $response = array(
                 'code' => $error['code'],
@@ -89,13 +119,9 @@ class Marker extends MY_Controller {
         $latitude = $this->input->post('latitude');
         $longitude = $this->input->post('longitude');
 
-        $data = [
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'marked_at' => date('Y-m-d H:i:s')
-        ];
+        
 
-        $res = $this->db->update('markers', $data);
+        
         if($res){
             $response = array(
                 'code' => 0,
