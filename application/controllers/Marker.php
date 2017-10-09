@@ -9,7 +9,8 @@ class Marker extends MY_Controller {
         $longitude = $this->input->get('longitude');
         $range = $this->input->get('range') ?: '0.003'; //默认方圆300米范围
 
-        $query = $this->db->where([
+        $query = $this->db->select('open_id as id, latitude, longitude, marked_at, continuous_day as cd, maximum_continuous_day as mcd')
+                ->where([
                 'latitude <' => $latitude+$range,
                 'latitude >' => $latitude-$range,
                 'longitude <' => $longitude+$range,
@@ -79,7 +80,9 @@ class Marker extends MY_Controller {
                 'open_id' => $open_id,
                 'latitude' => $latitude,
                 'longitude' => $longitude,
-                'marked_at' => date('Y-m-d H:i:s')
+                'marked_at' => date('Y-m-d H:i:s'),
+                'continuous_day' => 1,
+                'maximum_continuous_day' => 1
             ];
             $res = $this->db->insert('markers', $data);
         }
