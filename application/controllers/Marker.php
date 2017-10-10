@@ -31,7 +31,6 @@ class Marker extends MY_Controller
                 }
             }
         }, $open_id);
-        var_dump($markers);exit;
 
         $response = array(
             'code' => 0,
