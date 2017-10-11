@@ -23,6 +23,7 @@ class Dog extends CI_Controller
         if ($dogInfo) {
             $marker = $this->db->where('open_id', $open_id)->get('markers')->row();
             if ($marker) {
+                $dogInfo['markedAt'] = $marker->marked_at;
                 $lastClockDay = substr($marker->marked_at, 0, 10);
                 if ($lastClockDay != date('Y-m-d')) {
                     $dogInfo['clockAble'] = true;
