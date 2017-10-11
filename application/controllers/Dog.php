@@ -82,6 +82,44 @@ class Dog extends CI_Controller
     
     public function update()
     {
-        echo json_encode([], JSON_FORCE_OBJECT);
+        $result = LoginService::check();
+        if ($result['code'] !== 0) {
+            return;
+        }
+        
+        $open_id = $result['data']['userInfo']['openId'];
+
+        $name = $this->input->post('name');
+        $breed = $this->input->post('breed');
+        $avatarUrl = $this->input->post('avatarUrl');
+        $data = [];
+        if ($name) {
+            $data['name'] = $name;
+        }
+        if ($breed) {
+            $data['breed'] = $breed;
+        }
+        if ($avatarUrl) {
+            $data['avatar_url'] = $avatarUrl;
+        }
+        $res = $this->db->update('dogs', $data, ['open_id' => $open_id]);
+
+        if ($res) {
+            unset($data['open_id']);
+            $response = [
+                'code' => 0,
+                'message' => 'ok',
+                'data' => $data,
+            ];
+        } else {
+            $error = $this->db->error();
+            $response = [
+                'code' => $error['code'],
+                'message' => $error['message'],
+                'data' => $data,
+            ];
+        }
+        //echo json_encode($response, JSON_FORCE_OBJECT);
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 }
