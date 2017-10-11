@@ -58,6 +58,8 @@ class Dog extends CI_Controller
             'name' => $name,
             'breed' => $breed,
             'avatar_url' => $avatarUrl,
+            'master_name' => $result['data']['userInfo']['nickName'],
+            'master_avatar_url' => $result['data']['userInfo']['avatarUrl'],
             'created_at' => date('Y-m-d H:i:s')
         ];
         
@@ -103,6 +105,8 @@ class Dog extends CI_Controller
         if ($avatarUrl) {
             $data['avatar_url'] = $avatarUrl;
         }
+        $data['master_name'] = $result['data']['userInfo']['nickName'];
+        $data['master_avatar_url'] = $result['data']['userInfo']['avatarUrl'];
         $res = $this->db->update('dogs', $data, ['open_id' => $open_id]);
 
         if ($res) {
