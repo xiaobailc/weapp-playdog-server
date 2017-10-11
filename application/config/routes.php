@@ -51,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
+$route['translate_uri_dashes'] = false;
 
 $route['dog/info']['get'] = 'dog/index';
 $route['dog/add']['post'] = 'dog/store';
@@ -62,3 +62,5 @@ $route['marker/add']['post'] = 'marker/store';
 $route['marker/up']['post'] = 'marker/update';
 
 $route['file/add']['post'] = 'file/add';
+
+$route['rank/list']['get'] = 'marker/rank';

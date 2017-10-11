@@ -165,4 +165,27 @@ class Marker extends MY_Controller
         ->set_content_type('application/json')
         ->set_output(json_encode($response));
     }
+
+    public function rank()
+    {
+        //暂时采取全国排名
+        $rankInfos = $this->db->select('markers.open_id as id, markers.continuous_day as cd, markers.maximum_continuous_day as mcd, dogs.name, dogs.breed, dogs.avatar_url as avatarUrl')
+                ->from('markers')
+                ->join('dogs', 'dogs.open_id = markers.open_id')
+                ->order_by('markers.continuous_day', 'DESC')
+                ->limit(50)
+                ->get()->result_array();
+
+        //var_dump($rankInfos);exit;
+        $response = array(
+            'code' => 0,
+            'message' => 'ok',
+            'data' => $rankInfos,
+        );
+
+        //echo json_encode($response, JSON_FORCE_OBJECT);
+        $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($response));
+    }
 }
