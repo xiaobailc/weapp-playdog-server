@@ -12,19 +12,14 @@ class Marker extends MY_Controller
         $open_id = $this->input->get('id');
         $range = $this->input->get('range') ?: '0.003'; //默认方圆300米范围
 
-        // $query = $this->db
-        //         ->select('open_id as id, latitude, longitude, marked_at, continuous_day as cd, maximum_continuous_day as mcd')
-        //         ->from('markers')
-        //         ->join('dogs', 'dogs.open_id = markers.open_id')
-        //         ->where([
-        //         'latitude <' => $latitude+$range,
-        //         'latitude >' => $latitude-$range,
-        //         'longitude <' => $longitude+$range,
-        //         'longitude >' => $longitude-$range])
-        //         ->get();
         $markers = $this->db->select('markers.open_id as id, markers.latitude, markers.longitude, markers.marked_at, markers.continuous_day as cd, markers.maximum_continuous_day as mcd, dogs.name, dogs.breed, dogs.avatar_url as avatarUrl')
                 ->from('markers')
                 ->join('dogs', 'dogs.open_id = markers.open_id')
+                ->where([
+                'markers.latitude <' => $latitude+$range,
+                'markers.latitude >' => $latitude-$range,
+                'markers.longitude <' => $longitude+$range,
+                'markers.longitude >' => $longitude-$range])
                 ->get()->result_array();
 
         array_walk($markers, function (&$item, $key, $open_id) {
