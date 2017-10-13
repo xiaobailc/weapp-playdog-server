@@ -25,7 +25,7 @@ class Dog extends CI_Controller
             if ($marker) {
                 $dogInfo['markedAt'] = $marker->marked_at;
                 $lastClockDay = substr($marker->marked_at, 0, 10);
-                if ($lastClockDay != date('Y-m-d')) {
+                if ($lastClockDay == date('Y-m-d')) {
                     $dogInfo['clockAble'] = true;
                 }
             }
