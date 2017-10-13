@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use \QCloud_WeApp_SDK\Auth\LoginService as LoginService;
 
-class Dog extends CI_Controller
+class Dynamics extends CI_Controller
 {
     public function index()
     {
@@ -14,7 +14,7 @@ class Dog extends CI_Controller
             return;
         }
 
-        $open_id = $this->input->post('id') ? $this->input->post('id') : $result['data']['userInfo']['openId'];
+        $open_id = $result['data']['userInfo']['openId'];
         //根据openid 获取宠物信息
         $dogInfo = $this->db->select('open_id as id, name, breed, avatar_url as avatarUrl')
             ->where(['open_id'=> $open_id])
@@ -25,8 +25,8 @@ class Dog extends CI_Controller
             if ($marker) {
                 $dogInfo['markedAt'] = $marker->marked_at;
                 $lastClockDay = substr($marker->marked_at, 0, 10);
-                if ($lastClockDay != date('Y-m-d')) {
-                    $dogInfo['clockAble'] = true;
+                if ($lastClockDay == date('Y-m-d')) {
+                    $dogInfo['clocked'] = true;
                 }
             }
         }

@@ -54,16 +54,18 @@ class Marker extends MY_Controller
 
         $open_id = $result['data']['userInfo']['openId'];
 
-        $marker = $this->db->where('open_id', $open_id)->get('markers')->row();
-
         $latitude = $this->input->post('latitude');
         $longitude = $this->input->post('longitude');
+        $dogName = $this->input->post('dogName');
+        $dogAvatarUrl = $this->input->post('dogAvatarUrl');
+        $now = time();
         
+        //插入地图标记表
+        $marker = $this->db->where('open_id', $open_id)->get('markers')->row();
         if ($marker) {
             //获取上次打卡时间
             $last_marked_at = substr($marker->marked_at, 0, 10);
             $last = strtotime($last_marked_at);
-            $now = time();
             $diff = $now - $last;
             if ($diff < 86400) {
                 //一天之内
@@ -102,6 +104,17 @@ class Marker extends MY_Controller
         }
 
         if ($res) {
+            //插入动态表
+            $this->db->insert('dynamics', [
+                'open_id' => $open_id,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'marked_at' => date('Y-m-d H:i:s', $now),
+                'master_name' => $result['data']['userInfo']['nickName'],
+                'master_avatar_url' => $result['data']['userInfo']['avatarUrl'],
+                'dog_name' => $dogName,
+                'dog_avatar_url' => $dogAvatarUrl
+            ]);
             unset($data['open_id']);
             $response = array(
                 'code' => 0,
