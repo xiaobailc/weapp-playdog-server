@@ -14,7 +14,7 @@ class Dog extends CI_Controller
             return;
         }
 
-        $open_id = $this->input->post('id') ? $this->input->post('id') : $result['data']['userInfo']['openId'];
+        $open_id = $this->input->get('id') ? $this->input->get('id') : $result['data']['userInfo']['openId'];
         //根据openid 获取宠物信息
         $dogInfo = $this->db->select('open_id as id, name, breed, avatar_url as avatarUrl')
             ->where(['open_id'=> $open_id])
