@@ -64,3 +64,5 @@ $route['marker/up']['post'] = 'marker/update';
 $route['file/add']['post'] = 'file/add';
 
 $route['rank/list']['get'] = 'marker/rank';
+
+$route['dynamic/list']['get'] = 'dynamic/index';
