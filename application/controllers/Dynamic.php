@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use \QCloud_WeApp_SDK\Auth\LoginService as LoginService;
 
-class Dynamics extends CI_Controller
+class Dynamic extends CI_Controller
 {
     public function index()
     {
@@ -37,94 +37,6 @@ class Dynamics extends CI_Controller
             'data' => $dogInfo,
         );
 
-        $this->output->set_content_type('application/json')->set_output(json_encode($response));
-    }
-
-    public function store()
-    {
-        $result = LoginService::check();
-        if ($result['code'] !== 0) {
-            return;
-        }
-        
-        $open_id = $result['data']['userInfo']['openId'];
-
-        $name = $this->input->post('name');
-        $breed = $this->input->post('breed');
-        $avatarUrl = $this->input->post('avatarUrl');
-
-        $data = [
-            'open_id' => $open_id,
-            'name' => $name,
-            'breed' => $breed,
-            'avatar_url' => $avatarUrl,
-            'master_name' => $result['data']['userInfo']['nickName'],
-            'master_avatar_url' => $result['data']['userInfo']['avatarUrl'],
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-        
-        $res = $this->db->insert('dogs', $data);
-        if ($res) {
-            unset($data['open_id']);
-            $response = [
-                'code' => 0,
-                'message' => 'ok',
-                'data' => $data,
-            ];
-        } else {
-            $error = $this->db->error();
-            $response = [
-                'code' => $error['code'],
-                'message' => $error['message'],
-                'data' => $data,
-            ];
-        }
-        //echo json_encode($response, JSON_FORCE_OBJECT);
-        $this->output->set_content_type('application/json')->set_output(json_encode($response));
-    }
-    
-    public function update()
-    {
-        $result = LoginService::check();
-        if ($result['code'] !== 0) {
-            return;
-        }
-        
-        $open_id = $result['data']['userInfo']['openId'];
-
-        $name = $this->input->post('name');
-        $breed = $this->input->post('breed');
-        $avatarUrl = $this->input->post('avatarUrl');
-        $data = [];
-        if ($name) {
-            $data['name'] = $name;
-        }
-        if ($breed) {
-            $data['breed'] = $breed;
-        }
-        if ($avatarUrl) {
-            $data['avatar_url'] = $avatarUrl;
-        }
-        $data['master_name'] = $result['data']['userInfo']['nickName'];
-        $data['master_avatar_url'] = $result['data']['userInfo']['avatarUrl'];
-        $res = $this->db->update('dogs', $data, ['open_id' => $open_id]);
-
-        if ($res) {
-            unset($data['open_id']);
-            $response = [
-                'code' => 0,
-                'message' => 'ok',
-                'data' => $data,
-            ];
-        } else {
-            $error = $this->db->error();
-            $response = [
-                'code' => $error['code'],
-                'message' => $error['message'],
-                'data' => $data,
-            ];
-        }
-        //echo json_encode($response, JSON_FORCE_OBJECT);
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 }
