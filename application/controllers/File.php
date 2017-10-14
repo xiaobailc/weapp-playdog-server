@@ -1,17 +1,18 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 use \QCloud_WeApp_SDK\Auth\LoginService as LoginService;
 
 class File extends CI_Controller {
-    public function add() {
+    public function add()
+    {
         $config['upload_path']      = './uploads/';
-        $config['allowed_types']    = 'gif|jpg|png';
+        //$config['allowed_types']    = 'gif|jpg|png|jpeg';
         $config['encrypt_name']     = true;
 
         $this->load->library('upload', $config);
 
-        if ( ! $this->upload->do_upload('petavatar')) {
+        if (!$this->upload->do_upload('petavatar')) {
             $response = array('error' => $this->upload->display_errors());
         } else {
             $response = array(
@@ -26,13 +27,15 @@ class File extends CI_Controller {
             ->set_output(json_encode($response));
     }
 
-    public function store(){
+    public function store()
+    {
         $this->output
         ->set_content_type('application/json')
         ->set_output(json_encode([]));
     }
     
-    public function update(){
+    public function update()
+    {
         $this->output
         ->set_content_type('application/json')
         ->set_output(json_encode([]));
