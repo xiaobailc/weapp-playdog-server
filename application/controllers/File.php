@@ -7,7 +7,7 @@ class File extends CI_Controller {
     public function add()
     {
         $config['upload_path']      = './uploads/';
-        //$config['allowed_types']    = 'gif|jpg|png|jpeg';
+        $config['allowed_types']    = '*';
         $config['encrypt_name']     = true;
 
         $this->load->library('upload', $config);
