@@ -176,10 +176,21 @@ class Marker extends MY_Controller
 
     public function rank()
     {
+        $result = LoginService::check();
+        
+        if ($result['code'] !== 0) {
+            return;
+        }
+        
+        $open_id = $result['data']['userInfo']['openId'];
+        //获得当日时间
+        $today = date("Y-m-d");
+
         //暂时采取全国排名
-        $rankInfos = $this->db->select('markers.open_id as id, markers.continuous_day as cd, markers.maximum_continuous_day as mcd, dogs.name, dogs.breed, dogs.avatar_url as avatarUrl')
+        $rankInfos = $this->db->select('markers.open_id as id, markers.continuous_day as cd, markers.maximum_continuous_day as mcd, dogs.name, dogs.breed, dogs.avatar_url as avatarUrl, dogs.like_num as likeNum, likes.liked_at as likeAt')
                 ->from('markers')
                 ->join('dogs', 'dogs.open_id = markers.open_id')
+                ->join('likes', "likes.master_id = markers.open_id and likes.follow_id = '$open_id' and likes.liked_at > '$today'", 'left')
                 ->order_by('markers.continuous_day', 'DESC')
                 ->limit(50)
                 ->get()->result_array();
