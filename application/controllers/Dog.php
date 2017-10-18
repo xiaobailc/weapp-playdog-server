@@ -16,7 +16,7 @@ class Dog extends CI_Controller
 
         $open_id = $this->input->get('id') ? $this->input->get('id') : $result['data']['userInfo']['openId'];
         //根据openid 获取宠物信息
-        $dogInfo = $this->db->select('open_id as id, name, breed, avatar_url as avatarUrl')
+        $dogInfo = $this->db->select('open_id as id, name, breed, avatar_url as avatarUrl, like_num as likeNum')
             ->where(['open_id'=> $open_id])
             ->get('dogs')
             ->row_array();
