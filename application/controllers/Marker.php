@@ -12,7 +12,7 @@ class Marker extends MY_Controller
         $open_id = $this->input->get('id');
         $range = $this->input->get('range') ?: '0.003'; //默认方圆300米范围
 
-        $markers = $this->db->select('markers.open_id as id, markers.latitude, markers.longitude, markers.marked_at, markers.continuous_day as cd, markers.maximum_continuous_day as mcd, dogs.name, dogs.breed, dogs.avatar_url as avatarUrl')
+        $markers = $this->db->select('markers.open_id as id, markers.latitude, markers.longitude, markers.marked_at, markers.continuous_day as cd, markers.maximum_continuous_day as mcd, dogs.name, dogs.breed, dogs.avatar_url as avatarUrl, dogs.like_num as likeNum')
                 ->from('markers')
                 ->join('dogs', 'dogs.open_id = markers.open_id')
                 ->where([
