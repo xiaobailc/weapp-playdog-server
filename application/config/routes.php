@@ -67,4 +67,5 @@ $route['rank/list']['get'] = 'marker/rank';
 
 $route['dynamic/list']['get'] = 'dynamic/index';
 
+$route['like/list']['get'] = 'like/index';
 $route['like/add']['post'] = 'like/store';

@@ -5,6 +5,29 @@ use \QCloud_WeApp_SDK\Auth\LoginService as LoginService;
 
 class Like extends CI_Controller
 {
+    public function index()
+    {
+        $result = LoginService::check();
+        if ($result['code'] !== 0) {
+            return;
+        }
+        
+        $open_id = $result['data']['userInfo']['openId'];
+
+        $likeInfos = $this->db->from('likes')->where([
+            'master_id' => $open_id
+        ])->get()->result_array();
+        //var_dump($likeInfos);exit;
+        $response = array(
+            'code' => 0,
+            'message' => 'ok',
+            'data' => $likeInfos,
+        );
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
+    }
+
     public function store()
     {
         $result = LoginService::check();
