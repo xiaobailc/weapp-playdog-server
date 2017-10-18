@@ -14,9 +14,10 @@ class Like extends CI_Controller
         
         $open_id = $result['data']['userInfo']['openId'];
 
-        $likeInfos = $this->db->from('likes')->where([
-            'master_id' => $open_id
-        ])->get()->result_array();
+        $likeInfos = $this->db->select('follow_id as id, follow_name as name, follow_avatar_url as avatarUrl, liked_at as likedAt')
+            ->from('likes')
+            ->where(['master_id' => $open_id])
+            ->get()->result_array();
         //var_dump($likeInfos);exit;
         $response = array(
             'code' => 0,
