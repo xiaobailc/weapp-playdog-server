@@ -9,27 +9,16 @@ class Dog extends CI_Controller
     {
         $result = LoginService::check();
 
-        // check failed
         if ($result['code'] !== 0) {
             return;
         }
 
         $open_id = $this->input->get('id') ? $this->input->get('id') : $result['data']['userInfo']['openId'];
         //根据openid 获取宠物信息
-        $dogInfo = $this->db->select('open_id as id, name, breed, avatar_url as avatarUrl, like_num as likeNum')
+        $dogInfo = $this->db
             ->where(['open_id'=> $open_id])
             ->get('dogs')
             ->row_array();
-        if ($dogInfo) {
-            $marker = $this->db->where('open_id', $open_id)->get('markers')->row();
-            if ($marker) {
-                $dogInfo['markedAt'] = $marker->marked_at;
-                $lastClockDay = substr($marker->marked_at, 0, 10);
-                if ($lastClockDay == date('Y-m-d')) {
-                    $dogInfo['clocked'] = true;
-                }
-            }
-        }
 
         $response = array(
             'code' => 0,
@@ -37,7 +26,9 @@ class Dog extends CI_Controller
             'data' => $dogInfo,
         );
 
-        $this->output->set_content_type('application/json')->set_output(json_encode($response));
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 
     public function store()
@@ -54,22 +45,35 @@ class Dog extends CI_Controller
         if ($this->wordHasCensor($name)) {
             $response = [
                 'code' => -1,
-                'message' => '该名称不能使用',
-                'data' => $name,
+                'message' => '该名称不能使用'
             ];
             $this->output
                 ->set_content_type('application/json', 'utf-8')
-                ->set_output(json_encode($response))
-                ->_display();
-            exit;
+                ->set_output(json_encode($response));
+            return;
         }
         $breed = $this->input->post('breed');
         $avatarUrl = $this->input->post('avatarUrl');
+        $gender = $this->input->post('gender') == '1' ? 1 : 0;
+        $birthday = $this->input->post('birthday');
+
+        if (empty($name) || empty($breed) || empty($avatarUrl) || empty($birthday)) {
+            $response = [
+                'code' => -1,
+                'message' => '必填字段不能为空'
+            ];
+            $this->output
+                ->set_content_type('application/json', 'utf-8')
+                ->set_output(json_encode($response));
+            return;
+        }
 
         $data = [
             'open_id' => $open_id,
             'name' => $name,
+            'gender' => $gender,
             'breed' => $breed,
+            'birthday' => $birthday,
             'avatar_url' => $avatarUrl,
             'master_name' => $result['data']['userInfo']['nickName'],
             'master_avatar_url' => $result['data']['userInfo']['avatarUrl'],
@@ -109,6 +113,8 @@ class Dog extends CI_Controller
         $name = $this->input->post('name');
         $breed = $this->input->post('breed');
         $avatarUrl = $this->input->post('avatarUrl');
+        $gender = $this->input->post('gender');
+        $birthday = $this->input->post('birthday');
         $data = [];
         if ($name) {
             if ($this->wordHasCensor($name)) {
@@ -119,9 +125,8 @@ class Dog extends CI_Controller
                 ];
                 $this->output
                     ->set_content_type('application/json', 'utf-8')
-                    ->set_output(json_encode($response))
-                    ->_display();
-                exit;
+                    ->set_output(json_encode($response));
+                return;
             }
             $data['name'] = $name;
         }
@@ -130,6 +135,23 @@ class Dog extends CI_Controller
         }
         if ($avatarUrl) {
             $data['avatar_url'] = $avatarUrl;
+        }
+        if ($gender) {
+            $data['gender'] = $gender=='1' ? 1 : 0;
+        }
+        if ($birthday) {
+            $data['birthday'] = $birthday;
+        }
+        if (empty($data)) {
+            $response = [
+                'code' => 0,
+                'message' => 'ok',
+                'data' => $data,
+            ];
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode($response));
+            return;
         }
         $data['master_name'] = $result['data']['userInfo']['nickName'];
         $data['master_avatar_url'] = $result['data']['userInfo']['avatarUrl'];

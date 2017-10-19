@@ -14,9 +14,10 @@ class Like extends CI_Controller
         
         $open_id = $result['data']['userInfo']['openId'];
 
-        $likeInfos = $this->db->select('follow_id as id, follow_name as name, follow_avatar_url as avatarUrl, liked_at as likedAt')
-            ->from('likes')
+        $likeInfos = $this->db->from('likes')
             ->where(['master_id' => $open_id])
+            ->order_by('liked_at', 'DESC')
+            ->limit(50)
             ->get()->result_array();
         //var_dump($likeInfos);exit;
         $response = array(
@@ -39,6 +40,18 @@ class Like extends CI_Controller
         $open_id = $result['data']['userInfo']['openId'];
 
         $id = $this->input->post('id');
+
+        if (empty($id)) {
+            $response = [
+                'code' => -1,
+                'message' => '必填字段不能为空'
+            ];
+            $this->output
+                ->set_content_type('application/json', 'utf-8')
+                ->set_output(json_encode($response));
+            return;
+        }
+
         $name = $result['data']['userInfo']['nickName'];
         $avatarUrl = $result['data']['userInfo']['avatarUrl'];
 
@@ -59,8 +72,10 @@ class Like extends CI_Controller
                     'message' => 'ok',
                     'data' => $likeInfo,
                 );
-                $this->output->set_content_type('application/json')->set_output(json_encode($response))->_display();
-                exit;
+                $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($response));
+                return;
             }
             //更新likes
             $data = [
@@ -69,8 +84,7 @@ class Like extends CI_Controller
             $res = $this->db->where([
                 'master_id' => $id,
                 'follow_id' => $open_id
-            ])->update('likes', $data);
-            //修改
+                ])->update('likes', $data);
         } else {
             //插入
             $data = [
@@ -104,7 +118,7 @@ class Like extends CI_Controller
         }
         //echo json_encode($response, JSON_FORCE_OBJECT);
         $this->output
-        ->set_content_type('application/json')
-        ->set_output(json_encode($response));
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 }

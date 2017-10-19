@@ -59,11 +59,10 @@ $route['dog/up']['post'] = 'dog/update';
 
 $route['marker/list']['get'] = 'marker/index';
 $route['marker/add']['post'] = 'marker/store';
-$route['marker/up']['post'] = 'marker/update';
 
 $route['file/add']['post'] = 'file/add';
 
-$route['rank/list']['get'] = 'marker/rank';
+$route['rank/list']['get'] = 'rank/index';
 
 $route['dynamic/list']['get'] = 'dynamic/index';
 
