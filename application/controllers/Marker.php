@@ -35,7 +35,9 @@ class Marker extends MY_Controller
                 ->limit(50)
                 ->get()->result_array();
 
+        $this->load->helper('url');
         array_walk($markerInfos, function (&$item, $key, $open_id) {
+            $item['avatar_url'] = base_url('uploads/'.$item['avatar_url']);
             if ($item['id']== $open_id) {
                 $item['myself'] = true;
                 $today = substr($item['last_marked_at'], 0, 10);

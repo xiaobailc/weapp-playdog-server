@@ -4,3 +4,4 @@ application/business/*.json
 vendor/
 weapp-sdk/
 composer.lock
+application/config/config.php

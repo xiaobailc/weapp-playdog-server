@@ -20,6 +20,10 @@ class Dog extends CI_Controller
             ->get('dogs')
             ->row_array();
 
+        if (isset($dogInfo['avatar_url'])) {
+            $this->load->helper('url');
+            $dogInfo['avatar_url'] = base_url('uploads/'.$dogInfo['avatar_url']);
+        }
         $response = array(
             'code' => 0,
             'message' => 'ok',
@@ -81,6 +85,8 @@ class Dog extends CI_Controller
         ];
         
         $res = $this->db->insert('dogs', $data);
+        $this->load->helper('url');
+        $data['avatar_url'] = base_url('uploads/'.$data['avatar_url']);
         if ($res) {
             $response = [
                 'code' => 0,
@@ -154,6 +160,11 @@ class Dog extends CI_Controller
         $data['master_name'] = $result['data']['userInfo']['nickName'];
         $data['master_avatar_url'] = $result['data']['userInfo']['avatarUrl'];
         $res = $this->db->update('dogs', $data, ['open_id' => $open_id]);
+
+        if (isset($data['avatar_url'])) {
+            $this->load->helper('url');
+            $data['avatar_url'] = base_url('uploads/'.$data['avatar_url']);
+        }
 
         if ($res) {
             $response = [
