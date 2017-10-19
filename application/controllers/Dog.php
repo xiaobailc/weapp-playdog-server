@@ -82,8 +82,6 @@ class Dog extends CI_Controller
         
         $res = $this->db->insert('dogs', $data);
         if ($res) {
-            $data['id'] = $open_id;
-            unset($data['open_id']);
             $response = [
                 'code' => 0,
                 'message' => 'ok',
@@ -158,8 +156,6 @@ class Dog extends CI_Controller
         $res = $this->db->update('dogs', $data, ['open_id' => $open_id]);
 
         if ($res) {
-            $data['id'] = $open_id;
-            unset($data['open_id']);
             $response = [
                 'code' => 0,
                 'message' => 'ok',

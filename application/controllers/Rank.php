@@ -33,7 +33,7 @@ class Rank extends MY_Controller
 
         //echo json_encode($response, JSON_FORCE_OBJECT);
         $this->output
-        ->set_content_type('application/json')
-        ->set_output(json_encode($response));
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 }

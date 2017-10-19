@@ -35,7 +35,7 @@ class Marker extends MY_Controller
                 ->limit(50)
                 ->get()->result_array();
 
-        array_walk($markers, function (&$item, $key, $open_id) {
+        array_walk($markerInfos, function (&$item, $key, $open_id) {
             if ($item['id']== $open_id) {
                 $item['myself'] = true;
                 $today = substr($item['last_marked_at'], 0, 10);
@@ -48,7 +48,7 @@ class Marker extends MY_Controller
         $response = array(
             'code' => 0,
             'message' => 'ok',
-            'data' => $markers,
+            'data' => $markerInfos,
         );
 
         $this->output
@@ -157,44 +157,5 @@ class Marker extends MY_Controller
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($response));
-    }
-    
-    public function update()
-    {
-        $result = LoginService::check();
-        
-        if ($result['code'] !== 0) {
-            return;
-        }
-        
-        $open_id = $result['data']['userInfo']['openId'];
-        
-        $this->db->where('open_id', $open_id);
-
-        $latitude = $this->input->post('latitude');
-        $longitude = $this->input->post('longitude');
-
-        if ($res) {
-            $response = array(
-                'code' => 0,
-                'message' => 'ok',
-                'data' => array(
-                    'markerInfo' => $data,
-                ),
-            );
-        } else {
-            $error = $this->db->error();
-            $response = array(
-                'code' => $error['code'],
-                'message' => $error['message'],
-                'data' => array(
-                    'markerInfo' => $data,
-                ),
-            );
-        }
-        //echo json_encode($response, JSON_FORCE_OBJECT);
-        $this->output
-        ->set_content_type('application/json')
-        ->set_output(json_encode($response));
     }
 }
