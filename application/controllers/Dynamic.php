@@ -21,12 +21,6 @@ class Dynamic extends CI_Controller
             ]);
         }
         $dynamicInfos = $this->db->order_by('marked_at', 'DESC')->limit(50)->get()->result_array();
-        //$dump($dynamicInfos);exit;
-
-        array_walk($dynamicInfos, function (&$item, $key) {
-            $item['showTime'] = $this->timeTranx($item['marked_at']);
-        });
-        //var_dump($dynamicInfos);exit;
 
         $response = array(
             'code' => 0,
@@ -34,41 +28,8 @@ class Dynamic extends CI_Controller
             'data' => $dynamicInfos,
         );
 
-        $this->output->set_content_type('application/json')->set_output(json_encode($response));
-    }
-
-    private function timeTranx($showTime)
-    {
-        $now = time();
-        $show = strtotime($showTime);
-        $dur = $now - $show;
-        if ($dur < 0) {
-            return $showTime;
-        }
-        if ($dur < 60) {
-            return $dur.'秒前';
-        }
-        if ($dur < 3600) {
-            return floor($dur/60).'分钟前';
-        }
-        if ($dur < 86400) {
-            return floor($dur/3600).'小时前';
-        }
-        if ($dur < 259200) {
-            return floor($dur/86400).'天前';
-        }
-        return $showTime;
-    }
-
-    private function secToTime($times)
-    {
-        $result = '00:00:00';
-        if ($times>0) {
-                $hour = floor($times/3600);
-                $minute = floor(($times-3600 * $hour)/60);
-                $second = floor((($times-3600 * $hour) - 60 * $minute) % 60);
-                $result = $hour.':'.$minute.':'.$second;
-        }
-        return $result;
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($response));
     }
 }
