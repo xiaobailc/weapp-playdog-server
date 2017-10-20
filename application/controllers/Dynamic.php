@@ -21,6 +21,11 @@ class Dynamic extends CI_Controller
             ]);
         }
         $dynamicInfos = $this->db->order_by('marked_at', 'DESC')->limit(50)->get()->result_array();
+        
+        $this->load->helper('url');
+        array_walk($dynamicInfos, function (&$item, $key) {
+            $item['dog_avatar_url'] = base_url('uploads/'.$item['dog_avatar_url']);
+        });
 
         $response = array(
             'code' => 0,
