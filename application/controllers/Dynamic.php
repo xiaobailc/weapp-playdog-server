@@ -11,7 +11,7 @@ class Dynamic extends CI_Controller
         $longitude = $this->input->get('longitude')?:0;
         $range = $this->input->get('range')?: 0.01;
 
-        $this->db->from('dynamics');
+        $this->db->from('markers');
         if ($latitude && $longitude) {
             $this->db->where([
                 'latitude <' => $latitude+$range,
@@ -24,7 +24,7 @@ class Dynamic extends CI_Controller
         //$dump($dynamicInfos);exit;
 
         array_walk($dynamicInfos, function (&$item, $key) {
-            $item['showTime'] = $this->timeTranx($item['markedAt']);
+            $item['showTime'] = $this->timeTranx($item['marked_at']);
         });
         //var_dump($dynamicInfos);exit;
 
@@ -58,5 +58,17 @@ class Dynamic extends CI_Controller
             return floor($dur/86400).'天前';
         }
         return $showTime;
+    }
+
+    private function secToTime($times)
+    {
+        $result = '00:00:00';
+        if ($times>0) {
+                $hour = floor($times/3600);
+                $minute = floor(($times-3600 * $hour)/60);
+                $second = floor((($times-3600 * $hour) - 60 * $minute) % 60);
+                $result = $hour.':'.$minute.':'.$second;
+        }
+        return $result;
     }
 }
