@@ -9,9 +9,8 @@ class Dynamic extends CI_Controller
     {
         $latitude = $this->input->get('latitude')?:0;
         $longitude = $this->input->get('longitude')?:0;
-        $range = $this->input->get('range')?:0.01;
+        $range = $this->input->get('range')?: 0.01;
 
-        $this->db->select('open_id as id, master_name as masterName, master_avatar_url as masterAvatarUrl, dog_name as dogName, dog_avatar_url as dogAvatarUrl, marked_at as markedAt');
         $this->db->from('dynamics');
         if ($latitude && $longitude) {
             $this->db->where([

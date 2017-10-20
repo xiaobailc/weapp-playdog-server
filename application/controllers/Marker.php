@@ -22,7 +22,7 @@ class Marker extends MY_Controller
         }
 
         $open_id = $this->input->get('id');
-        $range = $this->input->get('range') ?: '0.01'; //默认方圆1公里范围
+        $range = $this->input->get('range') ?: 0.01; //默认方圆1公里范围
 
         $markerInfos = $this->db
                 ->from('dogs')
@@ -41,7 +41,7 @@ class Marker extends MY_Controller
             if ($item['id']== $open_id) {
                 $item['myself'] = true;
                 $today = substr($item['last_marked_at'], 0, 10);
-                if ($today != date('Y-m-d')) {
+                if ($today != date('Y-m-d') && $item['type'] == 'stop') {
                     $item['hide'] = true;
                 }
             }
