@@ -140,7 +140,7 @@ class Dog extends CI_Controller
         if ($avatarUrl) {
             $data['avatar_url'] = $avatarUrl;
         }
-        if ($gender) {
+        if ($gender !== null) {
             $data['gender'] = $gender=='1' ? 1 : 0;
         }
         if ($birthday) {
