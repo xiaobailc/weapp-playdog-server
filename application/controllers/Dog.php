@@ -13,10 +13,13 @@ class Dog extends CI_Controller
             return;
         }
 
-        $open_id = $this->input->get('id') ? $this->input->get('id') : $result['data']['userInfo']['openId'];
+        $id = $this->input->get('id') ? $this->input->get('id') : $result['data']['userInfo']['openId'];
+        $open_id = $result['data']['userInfo']['openId'];
+        $today = date("Y-m-d");
         //根据openid 获取宠物信息
         $dogInfo = $this->db
-            ->where(['open_id'=> $open_id])
+            ->join('likes', "likes.master_id = dogs.open_id and likes.follow_id = '$open_id' and likes.liked_at > '$today'", 'left')
+            ->where(['open_id'=> $id])
             ->get('dogs')
             ->row_array();
 
