@@ -20,7 +20,12 @@ class Dynamic extends CI_Controller
                 'longitude >' => $longitude-$range
             ]);
         }
-        $dynamicInfos = $this->db->order_by('marked_at', 'DESC')->limit(50)->get()->result_array();
+        $this->db->select('markers.*')
+            ->join('(select open_id, max(marked_at) as time from markers group by open_id) as b', 'markers.open_id = b.open_id and markers.marked_at = b.time')
+            ->order_by('marked_at', 'DESC')
+            ->limit(50);
+        $query = $this->db->get();
+        $dynamicInfos = $query->result_array();
         
         $this->load->helper('url');
         array_walk($dynamicInfos, function (&$item, $key) {

@@ -60,6 +60,7 @@ class Like extends CI_Controller
                 'master_id' => $id,
                 'follow_id' => $open_id
             ])
+            ->order_by('liked_at', 'DESC')
             ->get()->row();
 
         if ($likeInfo) {
