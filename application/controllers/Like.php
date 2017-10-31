@@ -99,8 +99,7 @@ class Like extends CI_Controller
         }
 
         if ($res) {
-            //更新宠物表，修改liekNum，如果跨天则为1，当天则+1
-            $this->db->set('like_num', "if(last_liked_at > '".date('Y-m-d')."', like_num+1, 1)", false);
+            $this->db->set('like_num', 'like_num+1', false);
             $this->db->set('last_liked_at', date('Y-m-d H:i:s'));
             $this->db->where('open_id', $id);
             $this->db->update('dogs');
