@@ -11,10 +11,8 @@ class Cropper extends CI_Controller {
         $config['encrypt_name']     = true;
 
         $this->load->library('upload', $config);
-        $data = $this->input->post('x');
-        $data1 = $this->input->get('x');
-        var_dump($data);
-        var_dump($data1);exit;
+        $x = $this->input->post('x');
+        $x1 = $this->input->get('x');
 
         if (!$this->upload->do_upload('petavatar')) {
             $response = array('error' => $this->upload->display_errors());
@@ -23,6 +21,8 @@ class Cropper extends CI_Controller {
                 'code' => 0,
                 'message' => 'ok',
                 'data' => $this->upload->data(),
+                'x' => $x,
+                'x1' => $x1
             );
         }
         //echo json_encode($response, JSON_FORCE_OBJECT);
