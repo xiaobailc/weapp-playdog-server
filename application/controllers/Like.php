@@ -79,13 +79,22 @@ class Like extends CI_Controller
                 return;
             }
             //更新likes
+            // $data = [
+            //     'liked_at' => date('Y-m-d H:i:s'),
+            // ];
+            // $res = $this->db->where([
+            //     'master_id' => $id,
+            //     'follow_id' => $open_id
+            //     ])->update('likes', $data);
+            //插入
             $data = [
+                'master_id' => $id,
+                'follow_id' => $open_id,
+                'follow_name' => $name,
+                'follow_avatar_url' => $avatarUrl,
                 'liked_at' => date('Y-m-d H:i:s'),
             ];
-            $res = $this->db->where([
-                'master_id' => $id,
-                'follow_id' => $open_id
-                ])->update('likes', $data);
+            $res =  $this->db->insert('likes', $data);
         } else {
             //插入
             $data = [
