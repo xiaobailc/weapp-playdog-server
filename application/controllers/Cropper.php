@@ -12,18 +12,56 @@ class Cropper extends CI_Controller {
 
         $this->load->library('upload', $config);
         $x = $this->input->post('x');
-        $x1 = $this->input->get('x');
+        $x = $this->input->post('y');
+        $width = $this->input->post('width');
+        $height = $this->input->post('height');
 
         if (!$this->upload->do_upload('petavatar')) {
-            $response = array('error' => $this->upload->display_errors());
+            $response = [
+                'error' => $this->upload->display_errors()
+            ];
         } else {
-            $response = array(
-                'code' => 0,
-                'message' => 'ok',
-                'data' => $this->upload->data(),
-                'x' => $x,
-                'x1' => $x1
-            );
+            $data = $this->upload->data();
+            //裁剪图片
+            $config = [
+                'image_library' => 'gd2',
+                'source_image' => $data['full_path'],
+                'quality' => '50%',
+                'width' => $width,
+                'height' => $height,
+                'x_axis' => $x,
+                'y_axis' => $y
+            ];
+            $this->load->library('image_lib', $config);
+            
+            if (!$this->image_lib->crop()) {
+                $error = $this->image_lib->display_errors();
+                $this->image_lib->clear();
+                $response = [
+                    'code' => $error['code'],
+                    'message' => $error['message'],
+                    'data' => $data
+                ];
+            } else {
+                $this->image_lib->clear();
+                //生成缩略图
+                $config = [
+                    'image_library' => 'gd2',
+                    'source_image' => $data['full_path'],
+                    'quality' => '80%',
+                    'width' => 100,
+                    'height' => 100,
+                    'create_thumb' => true,
+                ];
+                $this->image_lib->initialize($config);
+                $this->image_lib->resize();
+                //成功
+                $response = [
+                    'code' => 0,
+                    'message' => 'ok',
+                    'data' => $data
+                ];
+            }
         }
         //echo json_encode($response, JSON_FORCE_OBJECT);
         $this->output
