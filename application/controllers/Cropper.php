@@ -62,9 +62,8 @@ class Cropper extends CI_Controller {
                         $response = ['error' => $this->image_lib->display_errors()];
                     } else {
                         //成功
-                        $file_name = explode('.', $data['file_name']);
                         $data['file_name'] = date("Y/m/d") . '/' . $data['file_name'];
-                        $data['thumb_name'] = date("Y/m/d") . '/' . $file_name[0] . '_thumb.' . $file_name[1];
+                        $data['thumb_name'] = substr_replace($data['file_name'], '_thumb', -4, 0);
                         $response = [
                             'code' => 0,
                             'message' => 'ok',
