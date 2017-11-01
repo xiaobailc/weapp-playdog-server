@@ -7,7 +7,7 @@ class Cropper extends CI_Controller {
     public function index()
     {
         if (!is_dir("./uploads/".date("Y/m/d"))) {
-            mkdir("./upload/".date("Y/m/d"), 0777, true);//大图路径
+            mkdir("./uploads/".date("Y/m/d"), 0777, true);//大图路径
         }
         $config['upload_path']      = './uploads/'.date("Y/m/d");
         $config['allowed_types']    = '*';
