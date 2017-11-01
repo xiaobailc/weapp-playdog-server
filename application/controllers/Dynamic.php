@@ -9,7 +9,7 @@ class Dynamic extends CI_Controller
     {
         $latitude = $this->input->get('latitude')?:0;
         $longitude = $this->input->get('longitude')?:0;
-        $range = $this->input->get('range')?: 0.01;
+        $range = $this->input->get('range')?: 0.1;
 
         $this->db->from('markers');
         if ($latitude && $longitude) {

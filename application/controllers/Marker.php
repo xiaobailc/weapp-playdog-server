@@ -22,7 +22,7 @@ class Marker extends MY_Controller
         }
 
         $open_id = $this->input->get('id');
-        $range = $this->input->get('range') ?: 0.01; //默认方圆1公里范围
+        $range = $this->input->get('range') ?: 0.1; //默认方圆10公里范围
 
         $markerInfos = $this->db
                 ->from('dogs')
