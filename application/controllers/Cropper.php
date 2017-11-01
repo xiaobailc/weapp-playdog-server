@@ -42,25 +42,29 @@ class Cropper extends CI_Controller {
                     'error' => $error,
                 ];
             } else {
-                $this->image_lib->clear();
                 //生成大缩略图（替换）
+                $this->image_lib->clear();
                 $config_big_thumb = $this->config->item("config_big_thumb");
                 $config_big_thumb['source_image'] = $data['full_path'];
                 $this->image_lib->initialize($config_big_thumb);
                 if (!$this->image_lib->resize()) {
                     $response = ['error' => $this->image_lib->display_errors()];
                 } else {
-                //生成小缩略图（副本）
+                    //生成小缩略图（副本）
+                    $this->image_lib->clear();
                     $config_small_thumb = $this->config->item("config_small_thumb");
                     $config_small_thumb['source_image'] = $data['full_path'];
                     $this->image_lib->initialize($config_small_thumb);
-                    $this->image_lib->resize();
-                    //成功
-                    $response = [
-                        'code' => 0,
-                        'message' => 'ok',
-                        'data' => $data
-                    ];
+                    if (!$this->image_lib->resize()) {
+                        $response = ['error' => $this->image_lib->display_errors()];
+                    } else {
+                        //成功
+                        $response = [
+                            'code' => 0,
+                            'message' => 'ok',
+                            'data' => $data
+                        ];
+                    }
                 }
             }
         }
