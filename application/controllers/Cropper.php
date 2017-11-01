@@ -26,7 +26,8 @@ class Cropper extends CI_Controller {
             $config = [
                 'image_library' => 'gd2',
                 'source_image' => $data['full_path'],
-                'quality' => '50%',
+                'quality' => '30%',
+                'maintain_ratio' => false,
                 'width' => $width,
                 'height' => $height,
                 'x_axis' => $x,
