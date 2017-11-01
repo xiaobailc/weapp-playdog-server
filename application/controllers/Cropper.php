@@ -23,8 +23,16 @@ class Cropper extends CI_Controller {
         } else {
             $data = $this->upload->data();
             //裁剪图片
-            $config_crop = $this->config->item("config_crop");
-            $config_crop['source_image'] = $data['full_path'];
+            $config_crop = [
+                'image_library' => 'gd2',
+                'source_image' => $data['full_path'],
+                'quality' => '50%',
+                'maintain_ratio' => false,
+                'width' => $width,
+                'height' => $height,
+                'x_axis' => $x,
+                'y_axis' => $y
+            ];
             $this->load->library('image_lib', $config_crop);
 
             if (!$this->image_lib->crop()) {
