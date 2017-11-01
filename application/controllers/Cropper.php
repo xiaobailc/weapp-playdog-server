@@ -38,9 +38,7 @@ class Cropper extends CI_Controller {
                 $error = $this->image_lib->display_errors();
                 $this->image_lib->clear();
                 $response = [
-                    'code' => $error['code'],
-                    'message' => $error['message'],
-                    'data' => $data
+                    'error' => $error,
                 ];
             } else {
                 $this->image_lib->clear();
