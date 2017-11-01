@@ -12,7 +12,7 @@ class Cropper extends CI_Controller {
 
         $this->load->library('upload', $config);
         $x = $this->input->post('x');
-        $x = $this->input->post('y');
+        $y = $this->input->post('y');
         $width = $this->input->post('width');
         $height = $this->input->post('height');
 
@@ -33,7 +33,7 @@ class Cropper extends CI_Controller {
                 'y_axis' => $y
             ];
             $this->load->library('image_lib', $config);
-            
+
             if (!$this->image_lib->crop()) {
                 $error = $this->image_lib->display_errors();
                 $this->image_lib->clear();
