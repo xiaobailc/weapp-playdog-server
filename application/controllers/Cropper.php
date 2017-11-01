@@ -23,17 +23,9 @@ class Cropper extends CI_Controller {
         } else {
             $data = $this->upload->data();
             //裁剪图片
-            $config = [
-                'image_library' => 'gd2',
-                'source_image' => $data['full_path'],
-                'quality' => '30%',
-                'maintain_ratio' => false,
-                'width' => $width,
-                'height' => $height,
-                'x_axis' => $x,
-                'y_axis' => $y
-            ];
-            $this->load->library('image_lib', $config);
+            $config_crop = $this->config->item("config_crop");
+            $config_crop['source_image'] = $data['full_path'];
+            $this->load->library('image_lib', $config_crop);
 
             if (!$this->image_lib->crop()) {
                 $error = $this->image_lib->display_errors();
@@ -43,16 +35,15 @@ class Cropper extends CI_Controller {
                 ];
             } else {
                 $this->image_lib->clear();
-                //生成缩略图
-                $config = [
-                    'image_library' => 'gd2',
-                    'source_image' => $data['full_path'],
-                    'quality' => '80%',
-                    'width' => 100,
-                    'height' => 100,
-                    'create_thumb' => true,
-                ];
-                $this->image_lib->initialize($config);
+                //生成大缩略图（替换）
+                $config_big_thumb = $this->config->item("config_big_thumb");
+                $config_big_thumb['source_image'] = $data['full_path'];
+                $this->image_lib->initialize($config_big_thumb);
+                $this->image_lib->resize();
+                //生成小缩略图（副本）
+                $config_small_thumb = $this->config->item("config_small_thumb");
+                $config_small_thumb['source_image'] = $data['full_path'];
+                $this->image_lib->initialize($config_small_thumb);
                 $this->image_lib->resize();
                 //成功
                 $response = [
