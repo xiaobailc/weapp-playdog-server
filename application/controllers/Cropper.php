@@ -44,7 +44,7 @@ class Cropper extends CI_Controller {
             } else {
                 //生成大缩略图（替换）
                 $this->image_lib->clear();
-                $config_big_thumb = $this->config->item("config_big_thumb");
+                $config_big_thumb = $this->config->item("big_thumb");
                 $config_big_thumb['source_image'] = $data['full_path'];
                 $this->image_lib->initialize($config_big_thumb);
                 if (!$this->image_lib->resize()) {
@@ -52,7 +52,7 @@ class Cropper extends CI_Controller {
                 } else {
                     //生成小缩略图（副本）
                     $this->image_lib->clear();
-                    $config_small_thumb = $this->config->item("config_small_thumb");
+                    $config_small_thumb = $this->config->item("small_thumb");
                     $config_small_thumb['source_image'] = $data['full_path'];
                     $this->image_lib->initialize($config_small_thumb);
                     if (!$this->image_lib->resize()) {
