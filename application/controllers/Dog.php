@@ -91,6 +91,7 @@ class Dog extends CI_Controller
         $res = $this->db->insert('dogs', $data);
         $this->load->helper('url');
         $data['avatar_url'] = base_url('uploads/'.$data['avatar_url']);
+        $data['avatar_big_url'] = substr_replace($data['avatar_url'], '_big', -4, 0);
         if ($res) {
             $response = [
                 'code' => 0,
@@ -168,6 +169,7 @@ class Dog extends CI_Controller
         if (isset($data['avatar_url'])) {
             $this->load->helper('url');
             $data['avatar_url'] = base_url('uploads/'.$data['avatar_url']);
+            $data['avatar_big_url'] = substr_replace($data['avatar_url'], '_big', -4, 0);
         }
 
         if ($res) {
