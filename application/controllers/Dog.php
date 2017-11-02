@@ -26,7 +26,7 @@ class Dog extends CI_Controller
         if (isset($dogInfo['avatar_url'])) {
             $this->load->helper('url');
             $dogInfo['avatar_url'] = base_url('uploads/'.$dogInfo['avatar_url']);
-            $dogInfo['avatar_thumb_url'] = substr_replace($dogInfo['avatar_url'], '_thumb', -4, 0);
+            $dogInfo['avatar_big_url'] = substr_replace($dogInfo['avatar_url'], '_big', -4, 0);
         }
         $response = array(
             'code' => 0,

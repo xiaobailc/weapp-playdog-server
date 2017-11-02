@@ -45,7 +45,7 @@ class Cropper extends CI_Controller {
                     'error' => $error,
                 ];
             } else {
-                //生成大缩略图（替换）
+                //生成大缩略图（副本）
                 $this->image_lib->clear();
                 $config_big_thumb = $this->config->item("big_thumb");
                 $config_big_thumb['source_image'] = $data['full_path'];
@@ -53,7 +53,7 @@ class Cropper extends CI_Controller {
                 if (!$this->image_lib->resize()) {
                     $response = ['error' => $this->image_lib->display_errors()];
                 } else {
-                    //生成小缩略图（副本）
+                    //生成小缩略图（替换）
                     $this->image_lib->clear();
                     $config_small_thumb = $this->config->item("small_thumb");
                     $config_small_thumb['source_image'] = $data['full_path'];
@@ -63,7 +63,7 @@ class Cropper extends CI_Controller {
                     } else {
                         //成功
                         $data['file_name'] = date("Y/m/d") . '/' . $data['file_name'];
-                        $data['thumb_name'] = substr_replace($data['file_name'], '_thumb', -4, 0);
+                        $data['thumb_name'] = substr_replace($data['file_name'], '_big', -4, 0);
                         $response = [
                             'code' => 0,
                             'message' => 'ok',
