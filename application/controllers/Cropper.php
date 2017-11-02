@@ -63,7 +63,7 @@ class Cropper extends CI_Controller {
                     } else {
                         //成功
                         $data['file_name'] = date("Y/m/d") . '/' . $data['file_name'];
-                        $data['thumb_name'] = substr_replace($data['file_name'], '_big', -4, 0);
+                        $data['file_big_name'] = substr_replace($data['file_name'], '_big', -4, 0);
                         $response = [
                             'code' => 0,
                             'message' => 'ok',
