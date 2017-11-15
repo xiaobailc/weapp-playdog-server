@@ -25,8 +25,10 @@ class Marker extends MY_Controller
         //默认方圆50公里范围
         $range = $this->input->get('range') ?: ($this->config->item("search_range") ? : 0.5);
         
+        $today = date("Y-m-d");
         $markerInfos = $this->db
                 ->from('dogs')
+                ->join('likes', "likes.master_id = dogs.open_id and likes.follow_id = '$open_id' and likes.liked_at > '$today'", 'left')
                 ->where([
                 'latitude <' => $latitude+$range,
                 'latitude >' => $latitude-$range,
@@ -39,7 +41,7 @@ class Marker extends MY_Controller
         $this->load->helper('url');
         array_walk($markerInfos, function (&$item, $key, $open_id) {
             $item['avatar_url'] = base_url('uploads/'.$item['avatar_url']);
-            if ($item['id']== $open_id) {
+            if ($item['open_id']== $open_id || $item['id']== $open_id) {
                 $item['myself'] = true;
                 $today = substr($item['last_marked_at'], 0, 10);
                 if ($today != date('Y-m-d') && $item['type'] == 'stop') {
