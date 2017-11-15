@@ -5,3 +5,4 @@ vendor/
 weapp-sdk/
 composer.lock
 application/config/config.php
+application/config/database.php
