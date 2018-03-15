@@ -68,3 +68,5 @@ $route['dynamic/list']['get'] = 'dynamic/index';
 
 $route['like/list']['get'] = 'like/index';
 $route['like/add']['post'] = 'like/store';
+
+$route['image/(:num)']['get'] = 'image/index/$1';
