@@ -43,7 +43,7 @@ class Image extends CI_Controller
         $image_path = APPPATH.'views/images/share_bg.png';
         $image_flower = APPPATH.'views/images/thy_flower.png';
         $image_outline = APPPATH.'views/images/thy_outline.png';
-        $font_path = APPPATH.'views/fonts/HappyZcool-seguiemj.ttf';
+        $font_path = APPPATH.'views/fonts/HappyZcool-seguiemoji.ttf';
         //$font_path = APPPATH.'views/fonts/MicrosoftYaHei.ttf';
         //if (!file_exists($image_path) || !file_exists($image_open) || !file_exists($font_path)) {
         if (!file_exists($image_path) || !file_exists($image_flower) || !file_exists($image_outline) || !file_exists($font_path)) {
