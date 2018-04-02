@@ -21,22 +21,30 @@ class Image extends CI_Controller
             return $this->json(['code' => 2,'error' => '参数错误']);
         }
 
+        $jueyu = $_GET['jueyu'] ?? 0;
+        $jueyu = intval($jueyu) == 1 ? true :false;
+
+        $gender = $_GET['gender'] ?? 0;
+        $gender = intval($gender) == 1 ? 1 :0;
+
         $value = $_GET['value'] ?? null;
         if (!$value || intval($value) !== $id) {
             return $this->json(['code' => 4,'error' => '参数错误']);
         }
+        $value = $jueyu ? 50 : intval($value);
         $level = ceil($value/20);
 
         $avatar_url = $_GET['avatarurl'] ?? null;
         if (!$avatar_url) {
-            return $this->json(['code' => 2,'error' => '参数错误']);
+            return $this->json(['code' => 5,'error' => '参数错误']);
         }
 
         //$image_path = APPPATH.'views/images/shareimage.jpg';
         $image_path = APPPATH.'views/images/share_bg.png';
         $image_flower = APPPATH.'views/images/thy_flower.png';
         $image_outline = APPPATH.'views/images/thy_outline.png';
-        $font_path = APPPATH.'views/fonts/MicrosoftYaHei.ttf';
+        $font_path = APPPATH.'views/fonts/HappyZcool-seguiemj.ttf';
+        //$font_path = APPPATH.'views/fonts/MicrosoftYaHei.ttf';
         //if (!file_exists($image_path) || !file_exists($image_open) || !file_exists($font_path)) {
         if (!file_exists($image_path) || !file_exists($image_flower) || !file_exists($image_outline) || !file_exists($font_path)) {
             return $this->json([
@@ -71,8 +79,13 @@ class Image extends CI_Controller
             '简直就是母汪中的极品贤妻良母！每次出门不乏众多追求者，这其中定有你的真命天子，也许明年你就升级为汪妈了呢！'
         ];
 
-        $text = intval($_GET['gender'] ?? 0) == 1 ? $text_mail[ceil($value / 10) - 1] : 
-        $text_femail[ceil($value / 10) - 1];
+        $text_jueyu = [
+          '桃花屋里桃花庵，桃花庵下桃花仙，桃花仙人种桃树，反正与我都无关！',
+          '我的肉体虽然无法与你天衣无缝，但我的心灵永远和你情投意合，我是长命狗，我为自己打call!'
+        ];
+
+        $text = $gender ? $text_mail[ceil($value / 10) - 1] : $text_femail[ceil($value / 10) - 1];
+        $text = $jueyu ? $text_jueyu[$gender] : $text;
 
         $width = 750;
         $height = 1080;
@@ -109,7 +122,7 @@ class Image extends CI_Controller
 
         //合并桃花模板
         for ($i=0; $i<5; $i++) {
-            $img->compositeImage( $level>$i ? $imgFlower : $imgOutline, imagick::COMPOSITE_OVER, $flowerX, $flowerY);
+            $img->compositeImage($level>$i ? $imgFlower : $imgOutline, imagick::COMPOSITE_OVER, $flowerX, $flowerY);
             $flowerX += 60;
         }
 
@@ -149,7 +162,7 @@ class Image extends CI_Controller
         list($line, $metrics) = $this->getTextRows($img, $draw, $text, $maxWidth, 9999);
         //$line = str_split($text);
         //$line = implode("\n", $line);
-        $draw->setTextInterlineSpacing(20);
+        $draw->setTextInterlineSpacing(22);
         $draw->annotation(70, $textY_text, $line);
         $img->drawImage($draw);
         $img->setImageFormat('jpg');
